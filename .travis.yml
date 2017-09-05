@@ -1,23 +1,19 @@
 language: node_js
 
 node_js:
-   - node
-
-branches:
-   only:
-      - master # will only build for master branch commits
+  - node
 
 before_script:
-   - npm install -g --silent firebase-tools # installs firebase to run firebase deploy
-   - npm install -g --silent @angular/cli
+  - npm install -g --silent firebase-tools
+  - npm install -g --silent @angular/cli
 
 script:
-   - ng build --prod
+  - ng build --prod
 
 after_success:
-  - firebase deploy --token $FIREBASE_TOKEN --non-interactive # firebase deploy after angular-cli build
+  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && firebase deploy --token $FIREBASE_TOKEN --non-interactive
 
 notifications:
   email:
     on_failure: change
-    on_success: change   
+    on_success: change
